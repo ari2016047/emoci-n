@@ -1,5 +1,6 @@
 # emoci-n
 it converts speech to text and analyzes the emotion of the user
+[![Watch the video](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](https://www.youtube.com/watch?v=dqHEGYlffl8)
 
 Instructions to run:
 
