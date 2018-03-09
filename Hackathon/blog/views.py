@@ -1,3 +1,4 @@
+from __future__ import print_function
 from django.shortcuts import render
 from django.http.response import HttpResponse, JsonResponse
 from django.views import generic
@@ -5,8 +6,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.urls import reverse
 from googletrans import Translator
+from watson_developer_cloud import ToneAnalyzerV3
+
 import json
 import speech_recognition as sr
+
+tone_analyzer = ToneAnalyzerV3(
+    username='5eb56774-16ea-454c-a583-ec27c61f4ade',
+    password='U2D8LPWrojZ6',
+    version='2017-09-26')
+
 
 translator = Translator(service_urls=[
 			'translate.google.com',
@@ -65,16 +74,26 @@ def Translate(request):
 
 		print("Result = "  +result_text)
 
-		context = {
-			"result": result_text
-		}
+		
+
+		text = result_text
+		result = json.dumps(tone_analyzer.tone(tone_input=text,content_type="text/plain"), indent=2)
+		print(result)
+		json_object = json.loads(result)
+		list12 = json_object["document_tone"]["tones"]
+		data_return = []
+		for i in range(0,len(list12)):
+			data_return.append(list12[i]["tone_name"])
+			data_return.append(list12[i]["score"])
+
+			
 
 		print("before render ")
+		context = {
+			"result": result_text,
+			"data_list":data_return
+		}
 
-		# def get_object(self, queryset=None, *args, **kwargs):
-		# 	title = self.kwargs.get("title")
-		# 	self.model.objects.get('title')=result_text
-		# 	print(self.model.objects.get('title'))
 
 		obj = json.dumps(context)
 		print("oo")
