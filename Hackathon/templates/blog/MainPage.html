@@ -1,0 +1,258 @@
+{% extends 'blog/Base.html' %}
+{% load static %}
+
+{% block css %}
+
+	<style type="text/css">
+		html, body {
+		   height: 100%;margin: 0; 
+		   background: radial-gradient(circle farthest-corner at center, #fff 0%, #E0E0E0 100%);
+		} 
+		#info {
+		    font-size: 20px;
+		}
+		#div_start {
+		    margin-left:100px;
+		}
+		#headline {
+		    text-decoration: none
+		}
+		#results {
+		    font-size: 14px;
+		    font-weight: bold;
+		    border: 1px solid #ddd;
+		    padding: 15px;
+		    text-align: left;
+		    min-height: 150px;
+		    background: #fff;
+		}
+		#start_button {
+		    border: 0;
+		    background-color:transparent;
+		    padding: 0;
+		}
+		.interim {
+		    color: gray;
+		}
+		.final {
+		    color: black;
+		    padding-right: 3px;
+		}
+		.button {
+		    display: none;
+		}
+		.marquee {
+		    margin: 20px auto;
+		}
+
+		#buttons {
+		    margin: 10px 0;
+		    position: relative;
+		    top: -50px;
+		}
+
+		    #copy {
+		    margin-top: 20px;
+		    }
+
+		    #copy > div {
+		    display: none;
+		    margin: 0 70px;
+		    }
+		 #x{
+   width:500px;
+   height:2000px;
+   float:left;
+   border:1px solid grey;
+   margin-left:10px;
+   }
+   #textArea{
+   margin-left:25px;
+   width:450px;
+   height:200px;
+   border:1px solid grey;
+   border-radius:10px;
+   }
+   #info_start{
+   margin-left:25px;
+   }
+
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+{% block navbar %}
+
+	{% include 'blog/navbar.html' %}
+{% endblock %}
+<div id="x">
+	<div id="info">
+          <p id="info_start">
+            <b>Click on the Microphone To Analyze your Tone</b>
+          </p>
+          <p id="info_speak_now" style="display:none;margin-left:150px;">
+            <b>Speak now....<b>
+          </p>
+          <p id="info_no_speech" style="display:none">
+            No speech was detected. You may need to adjust your <a href=
+            "//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">microphone
+            settings</a>.
+          </p>
+          <p id="info_no_microphone" style="display:none">
+            No microphone was found. Ensure that a microphone is installed and that
+            <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
+            microphone settings</a> are configured correctly.
+          </p>
+          <p id="info_allow" style="display:none">
+            Click the "Allow" button above to enable your microphone.
+          </p>
+          <p id="info_denied" style="display:none">
+            Permission to use microphone was denied.
+          </p>
+          <p id="info_blocked" style="display:none">
+            Permission to use microphone is blocked. To change, go to
+            chrome://settings/contentExceptions#media-stream
+          </p>
+          <p id="info_upgrade" style="display:none">
+            Web Speech API is not supported by this browser. Upgrade to <a href=
+            "//www.google.com/chrome">Chrome</a> version 25 or later.
+          </p>
+    </div>
+
+<textarea id="textArea"></textarea>
+<div style="margin-left:100px;margin-bottom:5px;">
+<select class="ui search dropdown" >
+  <option value="">Languages</option>
+  <option value="AL">English</option>
+  <option value="AK">Hindi</option>
+  <option value="AZ">Telgu</option>
+  <option value="AR">Tamil</option>
+  <option value="CA">Japanese</option>
+  <option value="CO">Spanish</option>
+  <select>
+  </div>
+
+    <div id="div_start">
+    <button type="submit" id="startRecognition" style="width:300px;margin-bottom:10px;background-color:powderblue;border-radius:10px;"><img alt="Start" style="border-radius:50px;"onclick="changeImage()" id="imgClickAndChange"
+          src="//google.com/intl/en/chrome/assets/common/images/content/mic.gif">
+    </button>
+    </div>
+
+<!-- 	<button id="stopRecognition">Stop Recognition</button> -->
+	
+
+	<form method="GET">{% csrf_token %}
+		<button id="my_form" style="width:300px;margin-bottom:5px;margin-left:100px;background-color:powderblue;border-radius:10px;" type="button">Translate to English</button>
+	</form>
+
+	<!-- <a class="ui primary" href="{% url 'translate' %}">Translate</a> -->
+    <h3 style="margin-left:50px;">Translated Text:</h3>
+	<div id ="1"style="font-size:20px;height:1000px;margin:5px;"></div>
+</div>
+
+	<!-- <h1>{{ result1 }}</h1> -->
+{% endblock %}
+
+
+
+{% block javascript %}
+
+<script>
+
+var recognizing = false;
+var recognition;
+
+function changeImage() {
+
+        // if (document.getElementById("imgClickAndChange").src = "//google.com/intl/en/chrome/assets/common/images/content/mic.gif") 
+        // {
+        //     document.getElementById("imgClickAndChange").src = "//google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif";
+        // }
+        // else if(document.getElementById("imgClickAndChange").src = "//google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif")
+        // {
+        //     document.getElementById("imgClickAndChange").src = "//google.com/intl/en/chrome/assets/common/images/content/mic.gif";
+        // }
+
+        if(recognizing = true){
+			recognition.stop();
+			recognizing = false;
+			showInfo('info_start');
+			document.getElementById("imgClickAndChange").src = "//google.com/intl/en/chrome/assets/common/images/content/mic.gif";
+			return;
+		}
+       
+}
+
+
+
+$(function () {
+
+  try {
+    recognition = new webkitSpeechRecognition();
+  } catch (e) {
+    recognition = Object;
+  }
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  // recognition.lang = 'hi-IN';
+  recognition.onresult = function (event) {
+    var txtRec = '';
+    for (var i = event.resultIndex; i < event.results.length; ++i) {
+      txtRec += event.results[i][0].transcript;
+      recognition.continuous = true;
+    }
+    $('#textArea').val(txtRec);
+  };
+  $('#startRecognition').click(function () {
+  	recognition.start();
+  	showInfo('info_speak_now');
+  	recognizing = true;
+  	showInfo('info_speak_now');
+    document.getElementById("imgClickAndChange").src = "//google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif";
+    $('#textArea').focus();
+    
+  });
+  // $('#stopRecognition').click(function () {
+  //   recognition.stop();
+  // });
+});
+
+$("#my_form").click(function (e) {
+	e.preventDefault();
+	console.log("sad");
+      var username = $("#textArea").val();
+      console.log(username);
+      $.ajax({
+        url: '/blog/translate',
+        type: 'GET',
+        data: {
+          'username': username,
+        },
+        dataType: 'json',
+        success: function (data) {
+          console.log(data["result"]);
+          document.getElementById("1").innerHTML = data["result"];
+        }
+      });
+
+});
+
+
+function showInfo(s) {
+  if (s) {
+    for (var child = info.firstChild; child; child = child.nextSibling) {
+      if (child.style) {
+        child.style.display = child.id == s ? 'inline' : 'none';
+      }
+    }
+    info.style.visibility = 'visible';
+  } else {
+    info.style.visibility = 'hidden';
+  }
+}
+
+</script>
+
+{% endblock %}
