@@ -2,7 +2,7 @@
 it converts speech to text and analyzes the emotion of the user
 
 
-[![Watch the video](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](https://www.youtube.com/watch?v=dqHEGYlffl8)
+[![Watch the video](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](https://www.youtube.com/watch?v=-gDpzo_ais4&feature=youtu.be)
 
 Instructions to run:
 
