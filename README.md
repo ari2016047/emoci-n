@@ -20,9 +20,9 @@ Instructions to run:
 
 2.E PyAudio 2.E pydub
 
-3.Extract zip folder name LastOfUs
+3.Extract zip folder name Hackathon
 
-4.copy two folders which are inside LastOfUS.rar and paste them into installed django directory
+4.copy two folders which are inside Hackathon.rar and paste them into installed django directory
 
 5.Open window Powershell
 
