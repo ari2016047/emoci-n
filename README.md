@@ -20,12 +20,12 @@ Instructions to run:
 
 2.E PyAudio 2.E pydub
 
-3.Extract zip folder name Hackathon
+3.Extract zip folder name emoci-n-master.zip
 
-4.copy two folders which are inside Hackathon.rar and paste them into installed django directory
+4.copy the folders which are inside emoci-n-master.zip and paste them into installed django directory
 
 5.Open window Powershell
 
-6.run server (pthon manage.py runserver)
+6.run server (python manage.py runserver)
 
 7.run on chrome (address/blog 'example : "127.0.0.1:8000/blog/" ')
